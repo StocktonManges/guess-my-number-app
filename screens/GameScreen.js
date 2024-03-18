@@ -1,8 +1,12 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import Title from "../components/ui/Title";
 import { useEffect, useState } from "react";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/ui/PrimaryButton";
+import Card from "../components/ui/Card";
+import InstructionText from "../components/ui/InstructionText";
+// Icons that come with the react native package
+import { Ionicons } from "@expo/vector-icons";
 
 const generateRandomBetween = (min, max, exclude) => {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -50,25 +54,31 @@ export default function GameScreen({ userNumber, onGameOver }) {
     <View style={styles.screen}>
       <Title style={styles.title}>Opponent's Guess</Title>
       <NumberContainer>{currentGuess}</NumberContainer>
-      <View>
-        <Text>Higher or Lower?</Text>
-        <View>
+      <Card>
+        <InstructionText style={styles.instructionText}>
+          Higher or Lower?
+        </InstructionText>
+        <View style={styles.buttonsContainer}>
           {/* These two PrimaryButton components call their onPress 
           function the same way. .bind() must be used to add a function
           that requires arguments if the function name is only used as 
           a pointer. */}
-          <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
-            -
-          </PrimaryButton>
-          <PrimaryButton
-            onPress={() => {
-              nextGuessHandler("higher");
-            }}
-          >
-            +
-          </PrimaryButton>
+          <View style={styles.button}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
+              <Ionicons name="remove" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+          <View style={styles.button}>
+            <PrimaryButton
+              onPress={() => {
+                nextGuessHandler("higher");
+              }}
+            >
+              <Ionicons name="add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
         </View>
-      </View>
+      </Card>
       <View>{/* Log Rounds */}</View>
     </View>
   );
@@ -78,5 +88,14 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 24,
+  },
+  instructionText: {
+    marginBottom: 12,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  button: {
+    flex: 1,
   },
 });
